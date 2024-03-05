@@ -107,7 +107,7 @@ st.pyplot(fig)
 
 # Membuat UI
 
-st.subheader('Korelasi antara kondisi cuaca (suhu, kelembaban, kecepatan angin) dengan jumlah sewa sepeda secara jam')
+st.subheader('Correlation between weather conditions (temperature, humidity, wind speed) and the number of bicycle rentals by hour')
 plt.figure(figsize=(10, 6))
 sns.set(style='whitegrid')
 sns.lineplot(
@@ -116,7 +116,7 @@ sns.lineplot(
     y='total',  # Menggunakan jumlah sewa sepeda sebagai sumbu y
     marker='o'
 )
-plt.title("Hubungan antara kondisi cuaca (suhu, kelembaban, kecepatan angin) dan Jumlah Sewa Sepeda per Jam")
+plt.title("Relationship between weather conditions (temperature, humidity, wind speed) and Number of Bike Rentals per Hour")
 plt.xlabel("Suhu (°C)")
 plt.ylabel("Jumlah Sewa Sepeda")
 
