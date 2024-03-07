@@ -8,7 +8,8 @@ import streamlit as st
 sns.set(style='dark')
 
 #mengimport data
-all_data = pd.read_csv('https://raw.githubusercontent.com/IAshura/data_analyst_project/main/Proyek_akhir_3/main_data.csv')
+all_data = pd.read_csv('https://raw.githubusercontent.com/Ashurinnn123/Data_Analyst_Dicoding/main/Submission/main_data.csv')
+bike_day_df = pd.read_csv("Bike-sharing-dataset/day.csv")
 
 datetime_columns = ['date']
 all_data.sort_values(by='date', inplace=True)
@@ -87,7 +88,7 @@ sns.barplot(
     y='casual',
     x='season',
     data=season_recap_df.sort_values(by='casual', ascending=False),
-    color='tab:orange',
+    color='tab:green',
     label='Casual User',
     ax=ax
 )
@@ -105,28 +106,35 @@ fig = plt.gcf()
 # Displaying the plot using Streamlit
 st.pyplot(fig)
 
-# Membuat UI
+# Membuat DataFrame sementara (ganti dengan data aktual Anda)
+bike_day_df = pd.DataFrame({
+    "season": [1, 2, 3, 4, 1, 2, 3, 4],
+    "yr": [2011, 2011, 2011, 2011, 2012, 2012, 2012, 2012],
+    "cnt": [100, 200, 150, 180, 220, 300, 250, 280],
+})
 
-st.subheader('Correlation between weather conditions (temperature, humidity, wind speed) and the number of bicycle rentals by hour')
-plt.figure(figsize=(10, 6))
-sns.set(style='whitegrid')
-sns.lineplot(
-    data=main_df,  # Menggunakan main_df yang sudah difilter berdasarkan rentang tanggal yang dipilih
-    x='temp',  # Menggunakan suhu sebagai sumbu x
-    y='total',  # Menggunakan jumlah sewa sepeda sebagai sumbu y
-    marker='o'
-)
-plt.title("Relationship between weather conditions (temperature, humidity, wind speed) and Number of Bike Rentals per Hour")
-plt.xlabel("Suhu (°C)")
-plt.ylabel("Jumlah Sewa Sepeda")
+# Mengganti nilai untuk membuat data lebih deskriptif
+bike_day_df.replace({
+    "season": {1: "Springer", 2: "Summer", 3: "Fall", 4: "Winter"},
+    "yr": {2011: 0, 2012: 1}
+}, inplace=True)
 
-# Get the current figure
-fig = plt.gcf()
+# Menghitung jumlah sepeda yang disewakan berdasarkan musim dan tahun
+season_counts = bike_day_df.groupby(by=["season", "yr"]).agg({
+    "cnt": "sum"
+}).reset_index()  
 
-# Displaying the plot using Streamlit
+# Menampilkan plot menggunakan Seaborn
+st.write("### Total number of bicycles rented by season")
+fig, ax = plt.subplots()
+sns.barplot(data=season_counts, x="season", y="cnt", hue="yr", palette=["blue", "green"], ax=ax)
+ax.set_ylabel("Jumlah")
+ax.set_title("Total number of bicycles rented by season")
+ax.legend(title="Tahun", loc="upper right")  
+plt.tight_layout()
+
+# Menampilkan plot menggunakan Streamlit
 st.pyplot(fig)
-
-
 
 # Subheader Monthly Recap
 st.subheader('performance of rental bicycle monthly')
